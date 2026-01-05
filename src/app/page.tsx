@@ -183,6 +183,16 @@ export default function Home() {
                   👕 {data.current.recommendation}
                </div>
             </div>
+            {/* Risk Factors 표시 */}
+            {data.current.riskFactors.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-2 mt-2">
+                {data.current.riskFactors.map((risk: string, i: number) => (
+                  <span key={i} className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full font-bold">
+                    ⚠️ {risk}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* 2. 하단 예보 리스트 */}
             <div className="p-6 bg-gray-50">

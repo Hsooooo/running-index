@@ -67,14 +67,24 @@ export async function GET(request: Request) {
         if (Number(key) <= currentSortKey) continue;
 
         // 🔥 미래 점수 계산 (함수 호출)
-        const result = calculateRunningScore(weather);
-        
-        forecastList.push({
-            displayTime: `${key.slice(8, 10)}:${key.slice(10, 12)}`,
-            score: result.score,
-            weather: { ...weather, feelsLike: result.feelsLike }, // 체감온도 포함해서 리턴
-            mainComment: result.mainComment
-        });
+        const result = calculateRunningScore({
+          tmp: weather.tmp,
+          pty: weather.pty,
+          pop: weather.pop,
+          wsd: weather.wsd,
+          reh: weather.reh
+      });
+      
+      forecastList.push({
+        // YYYYMMDDHHmm -> HH:mm 형식으로 변환
+        displayTime: `${key.slice(8, 10)}:${key.slice(10, 12)}`, 
+        score: result.score,
+        grade: result.grade,         // V2 추가: 색상 등급 (BEST, GOOD...)
+        riskFactors: result.riskFactors, // V2 추가: 위험 요소 배열
+        weather: { ...weather, feelsLike: result.feelsLike },
+        mainComment: result.mainComment,
+        recommendation: result.recommendation
+    });
     }
 
     return NextResponse.json({
